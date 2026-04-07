@@ -1,0 +1,38 @@
+# Credenciais e tokens OAuth — NUNCA subir
+credentials.json
+token.json
+*.json.bak
+
+# Ambiente virtual Python
+.venv/
+venv/
+env/
+
+# Cache Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# Variáveis de ambiente
+.env
+.env.*
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Distribuição / empacotamento
+dist/
+build/
+*.egg-info/
