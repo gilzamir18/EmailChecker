@@ -1,0 +1,11 @@
+tipo,entrada,resumo,acoes
+pedido,"A reunião de planejamento trimestral ocorrerá na próxima segunda-feira às 14h, na sala de conferências B. Por favor, revise o material em anexo antes do encontro.",['Revisar material em anexo antes do encontro.'],
+informativo,"O sistema de e-mails estará em manutenção no dia 10/05, das 22h às 6h do dia seguinte. O serviço ficará indisponível nesse período.","Manutenção do sistema em 10/05, das 22h às 6h. Serviço indisponível no período.",
+informativo,"A empresa atingiu a meta de R$ 1,2 milhão no primeiro semestre, superando em 15% o resultado do mesmo período do ano anterior.","Receita de R$ 1,2 mi no 1º semestre, 15% acima do ano anterior.",
+informativo,"A partir de 01/06, colaboradores poderão trabalhar remotamente até três dias por semana.","Nova política de home office a partir de 01/06: até 3 dias remotos por semana.",
+informativo,"O novo colaborador Pedro Alves iniciará na equipe de TI na próxima segunda-feira. Sua estação de trabalho já foi configurada.","Pedro Alves inicia na equipe de TI na próxima segunda-feira; estação já configurada.",
+pedido,"Detectamos um acesso suspeito à sua conta ontem às 23h. Por motivo de segurança, altere sua senha imediatamente e verifique os dispositivos conectados.",,"[altere a senha imediatamente; verifique os dispositivos conectados]"
+pedido,"Seu contrato vence em 30 dias. Responda este e-mail confirmando a renovação e indique o período desejado.",,"[responda confirmando a renovação; indique o período desejado]"
+pedido,"Identificamos uma tentativa de login a partir de um IP desconhecido. Caso não reconheça, revogue o acesso pelo link abaixo e redefina suas credenciais.",,"[revogue o acesso pelo link; redefina suas credenciais]"
+pedido,"Sua fatura de março ainda não foi paga. Regularize o pagamento até 05/04 para evitar suspensão do serviço.",,"[regularize o pagamento até 05/04]"
+pedido,"Para concluir seu cadastro, confirme seu e-mail clicando no link de verificação enviado. O link expira em 24 horas.",,"[confirme o e-mail clicando no link de verificação]"

@@ -153,65 +153,6 @@ class EmailValidatorTool(Block[EmailValidationInput, EmailValidationOutput]):
         return EmailValidationOutput(approved=approved)
 
 
-# ---------------------------------------------------------------------------
-# Agente com limite de tool calls (força resposta final após N chamadas)
-# ---------------------------------------------------------------------------
-
-class BoundedLLMAgentBlock(LLMAgentBlock):
-    """Igual ao LLMAgentBlock, mas força tool_choice='none' após max_tool_calls
-    chamadas de ferramentas, evitando loops infinitos com modelos pequenos."""
-    max_tool_calls: int = 2
-
-    async def run(self, input: AgentInput) -> AgentOutput:
-        litellm_tools = [block_to_tool_schema(b) for b in self.tools]
-
-        messages = [
-            {"role": "system", "content": self.system_prompt},
-            {"role": "user", "content": input.prompt},
-        ]
-
-        tool_call_count = 0
-        iteration_count = 0
-
-        while True:
-            if self.max_iterations is not None and iteration_count >= self.max_iterations:
-                return AgentOutput(response="Agent stopped: Max iterations reached.", tool_calls_made=tool_call_count)
-
-            iteration_count += 1
-            kwargs = self.litellm_kwargs.copy()
-
-            if litellm_tools:
-                kwargs["tools"] = litellm_tools
-                # Após atingir o limite de chamadas, proíbe novas ferramentas
-                kwargs["tool_choice"] = "none" if tool_call_count >= self.max_tool_calls else "auto"
-
-            response = await litellm.acompletion(model=self.model, messages=messages, **kwargs)
-            message = response.choices[0].message
-            messages.append(message.model_dump(exclude_none=True))
-
-            if not message.tool_calls:
-                return AgentOutput(response=message.content or "", tool_calls_made=tool_call_count)
-
-            for tool_call in message.tool_calls:
-                tool_call_count += 1
-                function_name = tool_call.function.name
-                matched_block = next((b for b in self.tools if b.name == function_name), None)
-
-                if not matched_block:
-                    messages.append({"role": "tool", "tool_call_id": tool_call.id, "name": function_name,
-                                     "content": json.dumps({"error": f"Tool {function_name} not found."})})
-                    continue
-
-                try:
-                    args_dict = json.loads(tool_call.function.arguments)
-                    input_model = matched_block.input_schema()(**args_dict)
-                    result = await matched_block.run(input=input_model)
-                    messages.append({"role": "tool", "tool_call_id": tool_call.id, "name": function_name,
-                                     "content": json.dumps(result.model_dump())})
-                except Exception as e:
-                    messages.append({"role": "tool", "tool_call_id": tool_call.id, "name": function_name,
-                                     "content": json.dumps({"error": str(e)})})
-
 
 # ---------------------------------------------------------------------------
 # Agente principal
@@ -219,9 +160,9 @@ class BoundedLLMAgentBlock(LLMAgentBlock):
 
 async def main():
     graph = WorkflowGraph()
-    llm_model = "gemini/gemini-3.1-flash-lite-preview"
+    llm_model = "ollama/granite4:latest" #"gemini/gemini-3.1-flash-lite-preview"
 
-    email_checker_agent = BoundedLLMAgentBlock(
+    email_checker_agent = LLMAgentBlock(
         name="EmailCheckerAgent",
         description="Um agente que verifica emails do usuário",
         system_prompt="""Você é um assistente que verifica emails do usuário.
